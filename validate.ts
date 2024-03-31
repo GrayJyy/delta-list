@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import projects from './main.json';
-import fs from 'fs';
+import dayjs from 'dayjs'
+import projects from './main.json'
+import fs from 'fs'
 
 /**
  * project information need add in /main.json
@@ -19,6 +19,7 @@ export interface Project {
    * brc-20-lucky: target token is BRC20 token and will be a lucky pool just for whitelist users
    */
   project_type: 'erc-20' | 'brc-20' | 'brc-20-lucky'
+  version: 'old' | 'new'
 
   /**
    * project contract address
@@ -105,110 +106,110 @@ export interface Project {
   expiration_time?: string
 }
 
-
 // is projects a array of Project
 
-if(!Array.isArray(projects)){
+if (!Array.isArray(projects)) {
   throw new Error('projects is not a array')
 }
 
-const projectIDs:string[] = [];
+const projectIDs: string[] = []
 
-const projectContractAddress:string[] = [];
+const projectContractAddress: string[] = []
 
-(projects as Project[]).forEach((project,index)=>{
-  if(!project.id){
+;(projects as Project[]).forEach((project, index) => {
+  if (!project.id) {
     throw new Error(`index ${index}'s project.id is required`)
   }
-  
-  if(projectIDs.includes(project.id)){
+
+  if (projectIDs.includes(project.id)) {
     throw new Error(`index ${index}'s project.id ${project.id} is duplicated`)
   }
 
   projectIDs.push(project.id)
 
-  if(!project.project_type || ['erc-20','brc-20','brc-20-lucky'].includes(project.project_type)){
+  if (!project.project_type || ['erc-20', 'brc-20', 'brc-20-lucky'].includes(project.project_type)) {
     throw new Error(`index ${index}'s project.project_type is required and must be erc-20|brc-20|brc-20-lucky`)
   }
 
-  if(!project.pool_type){
+  if (!project.pool_type) {
     throw new Error(`index ${index}'s project.pool_type is required`)
   }
 
-  if(project.pool_type!=='public' && project.pool_type!=='private'){
+  if (project.pool_type !== 'public' && project.pool_type !== 'private') {
     throw new Error(`index ${index}'s project.pool_type is invalid, it should be public or private`)
   }
 
-  if(!project.contract_address){
+  if (!project.contract_address) {
     throw new Error(`index ${index}'s project.contract_address is required`)
   }
 
-  if(projectContractAddress.includes(project.contract_address)){
+  if (projectContractAddress.includes(project.contract_address)) {
     throw new Error(`index ${index}'s project.contract_address is duplicated`)
   }
 
   projectContractAddress.push(project.contract_address)
 
-  if(!project.title){
+  if (!project.title) {
     throw new Error(`index ${index}'s project.title is required`)
   }
 
-  if(!project.summary){
+  if (!project.summary) {
     throw new Error(`index ${index}'s project.summary is required`)
   }
 
-  if(!project.social_accounts || !Array.isArray(project.social_accounts)){
+  if (!project.social_accounts || !Array.isArray(project.social_accounts)) {
     throw new Error(`index ${index}'s project.social_accounts is required and must be a Array`)
   }
 
-  for(let s=0;s<project.social_accounts.length;s++){
-    const account = project.social_accounts[s];
-    if(!account.type || !['twitter','telegram','discord','website'].includes(account.type)){
-      throw new Error(`index ${index}'s project.social_accounts' type is required and must be twitter or telegram or discord or website`)
+  for (let s = 0; s < project.social_accounts.length; s++) {
+    const account = project.social_accounts[s]
+    if (!account.type || !['twitter', 'telegram', 'discord', 'website'].includes(account.type)) {
+      throw new Error(
+        `index ${index}'s project.social_accounts' type is required and must be twitter or telegram or discord or website`
+      )
     }
-    if(!account.address){
+    if (!account.address) {
       throw new Error(`index ${index}'s project.social_accounts' address is required`)
     }
   }
-  
-  if(!project.chain_info){
+
+  if (!project.chain_info) {
     throw new Error(`index ${index}'s project.chain_info is required`)
   }
-  
-  if(!project.chain_info.id){
+
+  if (!project.chain_info.id) {
     throw new Error(`index ${index}'s project.chain_info.id is required`)
   }
-  
-  if(!project.chain_info.name){
+
+  if (!project.chain_info.name) {
     throw new Error(`index ${index}'s project.chain_info.name is required`)
   }
 
-
-  if(!project.nft_name){
+  if (!project.nft_name) {
     throw new Error(`index ${index}'s project.nft_name is required`)
   }
 
-  if(!project.cost_token){
+  if (!project.cost_token) {
     throw new Error(`index ${index}'s project.cost_token is required`)
   }
 
-  if(!project.cost_token.name){
+  if (!project.cost_token.name) {
     throw new Error(`index ${index}'s project.cost_token.name is required`)
   }
-  
-  if(!project.cost_token.symbol){
+
+  if (!project.cost_token.symbol) {
     throw new Error(`index ${index}'s project.cost_token.symbol is required`)
   }
 
-  if(!project.target_token){
+  if (!project.target_token) {
     throw new Error(`index ${index}'s project.target_token is required`)
   }
 
-  if(!project.target_token.name){
+  if (!project.target_token.name) {
     throw new Error(`index ${index}'s project.target_token.name is required`)
   }
-  
-  if(!project.target_token.symbol){
+
+  if (!project.target_token.symbol) {
     throw new Error(`index ${index}'s project.target_token.symbol is required`)
   }
 
@@ -222,32 +223,29 @@ const projectContractAddress:string[] = [];
   //   throw new Error(`index ${index}'s project.unlock_method.desc is required`)
   // }
 
-
-  if(!project.start_time || !dayjs(project.start_time,'YYYY-MM-DDThh:mm:ssZ',true).isValid()){
+  if (!project.start_time || !dayjs(project.start_time, 'YYYY-MM-DDThh:mm:ssZ', true).isValid()) {
     throw new Error(`index ${index}'s project.start_time is required and must be YYYY-MM-DDThh:mm:ssTZD`)
   }
 
-  if(!project.end_time || !dayjs(project.end_time,'YYYY-MM-DDThh:mm:ssZ',true).isValid()){
+  if (!project.end_time || !dayjs(project.end_time, 'YYYY-MM-DDThh:mm:ssZ', true).isValid()) {
     throw new Error(`index ${index}'s project.end_time is required and must be YYYY-MM-DDThh:mm:ssTZD`)
   }
 
-  if(!project.expiration_time || !dayjs(project.expiration_time,'YYYY-MM-DDThh:mm:ssZ',true).isValid()){
+  if (!project.expiration_time || !dayjs(project.expiration_time, 'YYYY-MM-DDThh:mm:ssZ', true).isValid()) {
     throw new Error(`index ${index}'s project.expiration_time is required and must be YYYY-MM-DDThh:mm:ssTZD`)
   }
 })
 
-const needFiles = ['description.md','detail-cover.png','list-cover.png','logo.png','nft.png']
+const needFiles = ['description.md', 'detail-cover.png', 'list-cover.png', 'logo.png', 'nft.png']
 
-for (let i =0; i<projectIDs.length;i++){
-  const id = projectIDs[i];
+for (let i = 0; i < projectIDs.length; i++) {
+  const id = projectIDs[i]
 
-  const files =  fs.readdirSync(`./projects/${id}`)
+  const files = fs.readdirSync(`./projects/${id}`)
 
-  needFiles.forEach(nf=>{
-    if(!files.includes(nf)){
+  needFiles.forEach(nf => {
+    if (!files.includes(nf)) {
       throw new Error(`project ${id}'s folder is missing ${nf}`)
     }
   })
-
 }
-

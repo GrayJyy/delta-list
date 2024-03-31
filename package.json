@@ -13,7 +13,7 @@
   },
   "scripts": {
     "validate": "ts-node validate.ts",
-    "throw-error":"ts-node throw-delete-error.ts",
-    "pr-diff":"ts-node git-diff.ts"
+    "throw-error": "ts-node throw-delete-error.ts",
+    "pr-diff": "ts-node git-diff.ts"
   }
 }
